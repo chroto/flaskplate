@@ -63,5 +63,6 @@ def deploy():
         local('uwsgi --master \
               --die-on-term \
               --pidfile=env/var/run/flaskplate.pid \
+              --daemonize=env/var/log/flaskplate.log \
               --ini env/etc/uwsgi/flaskplate.ini')
 
