@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>{% block title %}{{ page_title|default('Flaskplate') }}{% endblock %} </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <link rel="Shortcut Icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/x-icon">
+
+    {% block css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    {% endblock %}
+
+    {% block css_style %}
+    {% endblock %}
+
+    {% block js_top %}
+    <script src="//upcdn.b0.upaiyun.com/libs/modernizr/modernizr-2.6.2.min.js"></script>
+    {% endblock %}
+</head>
+<body>
+
+    <div id='wrap'>
+        {% block topbar %}
+        <div class="navbar">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class='brand' href='{{ url_for('frontend.index') }}'><img src="{{ url_for('static', filename='img/logo.png') }}" height="80px" width="80px" /></a>
+
+                    <div class="nav-collapse collapse pull-right">
+                      <ul class="nav">
+                        <!-- nav items go here -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endblock %}
+
+        {% block flash_message %}
+            {% with messages = get_flashed_messages(with_categories=True) %}
+                {% if messages %}
+                <div class="container">
+                    <div id='flash_message_container'>
+                        {% for category, msg in messages %}
+                            <div class="alert alert-{{ category }}">
+                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                {{ msg }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            {% endwith %}
+        {% endblock %}
+
+        {% block container %}
+        <div class="container">
+
+            {% block top %}
+                {% if tabs %}
+                <div>
+                    <ul class="nav nav-tabs">
+                        {% for tab, link in tabs %}
+                        <li class="{% if active == tab %}active{% endif %}">
+                            <a href="{{ link }}">{{ tab|capitalize }}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+            {% endblock %}
+
+            {% block body %}
+            {% endblock %}
+
+        </div>
+        {% endblock %}
+        <div id="push"></div>
+    </div>
+
+    <footer id="footer">
+        <ul class="footer-links">
+          <li>© {{ now('%Y') }}</li>
+            <li><a href='http://www.craftsy.com/'>Craftsy</a></li>
+            <li class="muted">&middot;</li>
+        </ul>
+    </footer>
+
+    {% block js_btm %}
+    <script src="//upcdn.b0.upaiyun.com/libs/jquery/jquery-2.0.0.min.js"></script>
+    {% endblock %}
+
+</body>
+</html>
