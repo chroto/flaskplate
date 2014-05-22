@@ -1,6 +1,7 @@
 import os
 import datetime
 import logging
+from logging.handlers import RotatingFileHandler
 
 from flask import Flask, render_template
 
@@ -52,7 +53,7 @@ def configure_logging(app):
     app.logger.setLevel(logging.INFO)
 
     info_log = os.path.join(app.config['LOG_FOLDER'], 'flaskplate.log')
-    info_file_handler = logging.handlers.RotatingFileHandler(info_log, maxBytes=100000, backupCount=10)
+    info_file_handler = RotatingFileHandler(info_log, maxBytes=100000, backupCount=10)
     info_file_handler.setLevel(logging.INFO)
     info_file_handler.setFormatter(logging.Formatter(
         '%(asctime)s %(levelname)s: %(message)s '
