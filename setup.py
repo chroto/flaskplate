@@ -17,6 +17,9 @@ setup(
     zip_safe=False,
     install_requires=[
         'Flask',
-        'Flask-Script'
-    ]
+        'Flask-Script',
+        'Flask-Testing',
+        'blinker'  # So we can use signals in tests
+    ],
+    test_suite='tests'
 )

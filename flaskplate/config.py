@@ -22,6 +22,9 @@ class DefaultConfig(BaseConfig):
 class DevelopmentConfig(DefaultConfig):
     pass
 
+class TestConfig(DefaultConfig):
+    pass
+
 
 class ProductionConfig(BaseConfig):
     DEBUG = False

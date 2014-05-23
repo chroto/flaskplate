@@ -1,12 +1,20 @@
 # -*- coding: utf-8 -*-
 
 # http://docs.fabfile.org/en/1.5/tutorial.html
+from contextlib import contextmanager
 
 from fabric.api import local, cd, prefix
 import os
 
-project = "flaskplate"
 BASE_DIR = os.path.join(os.path.dirname(__file__))
+
+project = "flaskplate"
+activate = os.path.join(BASE_DIR, 'env', 'bin', 'activate')
+
+@contextmanager
+def virtualenv():
+    with prefix('source {activate}'.format(activate=activate)):
+        yield
 
 
 def setup():
@@ -14,27 +22,24 @@ def setup():
     Setup virtual env.
     """
     local("virtualenv env")
-    activate_env()
-    local("python setup.py install")
-
-def activate_env():
-    """
-    Activate this application's virtualenv
-    """
-    activate_this = "env/bin/activate_this.py"
-    execfile(activate_this, dict(__file__=activate_this))
+    with virtualenv():
+        local("python setup.py install")
 
 
 def run():
     """
     Runs the application in development mode.
     """
-    activate_env()
-    local("python manage.py run")
+    with virtualenv():
+        local("python manage.py run")
+
+def test():
+    with virtualenv():
+        local('python setup.py test')
 
 def setup_deploy():
     with cd(BASE_DIR):
-        uwsgi_dir = os.path.join('env', 'etc', 'uwsgi'),
+        uwsgi_dir = os.path.join('env', 'etc', 'uwsgi')
         dirs = [
             uwsgi_dir,
             os.path.join('env', 'tmp'),
@@ -58,8 +63,7 @@ def setup_deploy():
             f.write(uwsgi_cfg)
 
 def deploy():
-    activate = os.path.join(BASE_DIR, 'env', 'bin', 'activate')
-    with prefix('. {activate}'.format(activate=activate)):
+    with virtualenv():
         local('uwsgi --master \
               --die-on-term \
               --pidfile=env/var/run/flaskplate.pid \
