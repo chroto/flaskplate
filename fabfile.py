@@ -43,8 +43,8 @@ def setup_deploy():
         dirs = [
             uwsgi_dir,
             os.path.join('env', 'tmp'),
-            os.path.join('env', 'run'),
-            os.path.join('env', 'log')
+            os.path.join('env', 'var', 'run'),
+            os.path.join('env', 'var', 'log')
         ]
         map(lambda x: local('mkdir -p {0}'.format(x)), dirs)
         uwsgi_cfg = '''
